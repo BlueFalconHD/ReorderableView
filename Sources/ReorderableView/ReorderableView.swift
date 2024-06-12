@@ -8,13 +8,13 @@ import AppKit
 import UniformTypeIdentifiers
 
 /// A protocol defining data requirements for reorderable items.
-protocol ReorderableData: Identifiable, Equatable {
+public protocol ReorderableData: Identifiable, Equatable {
     /// Unique identifier for the item.
     var id: UUID { get set }
 }
 
 /// Directions in which the reorderable view can layout its contents.
-enum ReorderableDirection {
+public enum ReorderableDirection {
     case HStack
     case VStack
     case LazyHStack
