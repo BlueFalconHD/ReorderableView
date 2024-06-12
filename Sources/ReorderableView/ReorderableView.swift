@@ -41,7 +41,7 @@ public struct ReorderableView<Item, Content>: View where Item: ReorderableData, 
     /// State to track the item currently being dragged.
     @State private var draggedItem: Item?
     
-    var body: some View {
+    public var body: some View {
         Group {
             switch direction {
             case .HStack:
