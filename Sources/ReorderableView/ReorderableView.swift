@@ -37,6 +37,9 @@ public struct ReorderableView<Item, Content>: View where Item: ReorderableData, 
     
     /// The layout direction of the view's contents.
     var direction: ReorderableDirection = .VStack
+
+    /// Whether haptics should play when an item is swapped
+    var haptics: Bool = false
     
     /// State to track the item currently being dragged.
     @State private var draggedItem: Item?
@@ -66,15 +69,16 @@ public struct ReorderableView<Item, Content>: View where Item: ReorderableData, 
                     self.draggedItem = item
                     return NSItemProvider(object: String(describing: item.id) as NSString)
                 }, preview: { Rectangle().opacity(0) })
-                .onDrop(of: [UTType.text], delegate: DragRelocateDelegate(item: item, data: $data, current: $draggedItem))
+                .onDrop(of: [UTType.text], delegate: DragRelocateDelegate(item: item, data: $data, current: $draggedItem, haptics: self.haptics))
         }
     }
 
-    public init(data: Binding<[Item]>, dragEnabled: Binding<Bool>, content: @escaping (Item) -> Content, direction: ReorderableDirection = .VStack) {
+    public init(data: Binding<[Item]>, dragEnabled: Binding<Bool>, content: @escaping (Item) -> Content, direction: ReorderableDirection = .VStack, haptics: Bool = false) {
         self._data = data
         self._dragEnabled = dragEnabled
         self.content = content
         self.direction = direction
+        self.haptics = haptics
     }
 }
 
@@ -87,12 +91,19 @@ struct DragRelocateDelegate<Item>: DropDelegate where Item: ReorderableData {
     /// The item currently being dragged.
     @Binding var current: Item?
 
+    var haptics: Bool
+    
+    private let hapticFeedback = UIImpactFeedbackGenerator(style: .medium)
+
     /// Handles the drop event by reordering items.
     func dropEntered(info: DropInfo) {
         if let currentIndex = data.firstIndex(of: current!), let targetIndex = data.firstIndex(of: item) {
             if currentIndex != targetIndex {
                 data.move(fromOffsets: IndexSet(integer: currentIndex),
                           toOffset: targetIndex > currentIndex ? targetIndex + 1 : targetIndex)
+                if (self.haptics) {
+                    hapticFeedback.impactOccurred()  // Trigger haptic feedback
+                }
             }
         }
     }
