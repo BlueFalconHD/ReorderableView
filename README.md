@@ -11,9 +11,8 @@ The `ReorderableView` is a SwiftUI component that enables interactive item reord
 
 ## Requirements
 
-- iOS 13.0+ / macOS 10.15+
+- iOS 13.0+ / macOS 12+
 - Swift 5.0+
-- Xcode 11.0+
 
 ## Installation
 
