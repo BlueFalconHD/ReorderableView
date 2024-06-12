@@ -69,6 +69,13 @@ public struct ReorderableView<Item, Content>: View where Item: ReorderableData, 
                 .onDrop(of: [UTType.text], delegate: DragRelocateDelegate(item: item, data: $data, current: $draggedItem))
         }
     }
+
+    public init(data: Binding<[Item]>, dragEnabled: Binding<Bool>, content: @escaping (Item) -> Content, direction: ReorderableDirection = .VStack) {
+        self._data = data
+        self._dragEnabled = dragEnabled
+        self.content = content
+        self.direction = direction
+    }
 }
 
 /// A delegate that handles the drag-and-drop functionality for reorderable items.
