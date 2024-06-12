@@ -27,7 +27,7 @@ public enum ReorderableDirection {
 /// Generics:
 ///  - `Item`: Must conform to `ReorderableData`.
 ///  - `Content`: The type of view to be displayed for each item.
-struct ReorderableView<Item, Content>: View where Item: ReorderableData, Content: View {
+public struct ReorderableView<Item, Content>: View where Item: ReorderableData, Content: View {
     /// The data array containing reorderable items.
     @Binding var data: [Item]
     /// Boolean state to enable or disable drag functionality.
